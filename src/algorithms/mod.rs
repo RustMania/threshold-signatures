@@ -7,9 +7,13 @@ pub mod primes;
 pub mod sha;
 pub mod zkp;
 
-use curv::arithmetic::traits::Samplable;
-use curv::BigInt;
+use crate::BigInt;
+use crate::{Integer, Modulo, One, Samplable, Zero};
 use std::borrow::Borrow;
+
+use curv::cryptographic_primitives::proofs::sigma_dlog::DLogProof;
+
+type CurvDLogProofType = DLogProof<curv::elliptic::curves::Secp256k1, sha2::Sha256>;
 
 /// Finds a generator of  a cyclic group of order n
 /// using known factorization of n.
@@ -23,10 +27,9 @@ pub fn sample_generator_from_cyclic_group(
     let One = BigInt::one();
     loop {
         let alpha = BigInt::sample_below(modulo);
-        if order_factorization
+        if !order_factorization
             .iter()
-            .find(|&&x| alpha.powm_sec(&(order / x), modulo.borrow()) == One)
-            .is_none()
+            .any(|&x| alpha.powm_sec(&(order / x), modulo) == One)
         {
             return alpha;
         }
@@ -41,7 +44,7 @@ pub fn crt_solver(reminders: &[&BigInt], moduli: &[&BigInt]) -> BigInt {
     let mut result = BigInt::zero();
     for (&ai, &ni) in reminders.iter().zip(moduli) {
         let Ni: BigInt = n.borrow() / ni;
-        let Mi: BigInt = Ni.invert(&ni).unwrap();
+        let Mi: BigInt = BigInt::mod_inv(&Ni, ni).unwrap();
         result += (ai * Ni * Mi) % n.borrow();
     }
     result % n
@@ -79,7 +82,7 @@ pub fn sample_generator_of_cyclic_subgroup(p: &BigInt, p_prim: &BigInt) -> BigIn
         for _ in 0..MAX_ITERATIONS_IN_REJECTION_SAMPLING {
             let h = BigInt::sample_below(p);
             if h != BigInt::one() {
-                return h.powm_sec(&exp, p);
+                return h.powm_sec(exp, p);
             }
         }
         unreachable!(
@@ -88,5 +91,25 @@ pub fn sample_generator_of_cyclic_subgroup(p: &BigInt, p_prim: &BigInt) -> BigIn
         );
     } else {
         panic!("incorrect input for sampling a generator of the subgroup");
+    }
+}
+
+trait Powm
+where
+    Self: Sized,
+{
+    #![allow(clippy::needless_arbitrary_self_type)]
+    fn powm_sec(self: &Self, exponent: &Self, modulus: &Self) -> Self;
+}
+
+// this is quick & dirty fix:
+// the underlying GMP call is NOT powm_sec(),
+// and inner object is private
+impl Powm for BigInt {
+
+    #![allow(clippy::needless_arbitrary_self_type)]
+    fn powm_sec(self: &Self, exponent: &Self, modulus: &Self) -> Self {
+        assert!(exponent >= &BigInt::zero(), "exponent must be non-negative");
+        BigInt::mod_pow(self, exponent, modulus)
     }
 }
