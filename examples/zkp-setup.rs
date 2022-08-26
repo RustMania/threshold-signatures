@@ -1,6 +1,6 @@
 #![allow(non_snake_case)]
 
-use ecdsa_mpc::algorithms::zkp::{ZkpPublicSetup, ZkpSetup};
+use ecdsa_mpc::zk_range_proofs::{ZkpPublicSetup, ZkpSetup};
 use std::env;
 use std::time::Instant;
 

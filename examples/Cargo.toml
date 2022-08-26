@@ -1,0 +1,45 @@
+[package]
+name = "examples"
+version = "0.4.1"
+license = "MIT"
+authors = [
+    "Oleg Burundukov <oleg.burundukov@ing.com>",
+]
+edition = "2018"
+publish = false
+
+[dependencies]
+crossbeam-channel = "0.4.0"
+log = "0.4.8"
+env_logger = "0.7.1"
+anyhow = "1.0.38"
+serde_json = "1.0.42"
+serde = { version = "1.0.102", features = ["derive"] }
+
+[dependencies.paillier]
+version = "0.4.2"
+package = "kzen-paillier"
+default-features = false
+
+[dev-dependencies]
+algorithms = { path = "../algorithms"}
+ecdsa-mpc = { path = "../ecdsa-mpc"}
+state-machine = { path = "../state-machine" }
+
+
+
+[[example]]
+name="keygen"
+path="keygen.rs"
+
+[[example]]
+name="zkp-setup"
+path="zkp-setup.rs"
+
+[[example]]
+name="safe-primes"
+path="safe-primes.rs"
+
+#[[example]]
+#name=""
+#path=""

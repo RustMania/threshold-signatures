@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
-use ecdsa_mpc::algorithms::primes::{random_safe_prime, PairOfSafePrimes};
-use ecdsa_mpc::algorithms::zkp::DEFAULT_SAFE_PRIME_BIT_LENGTH;
+use algorithms::config::DEFAULT_SAFE_PRIME_BIT_LENGTH;
+use algorithms::primes::{random_safe_prime, PairOfSafePrimes};
 use std::env;
 use std::time::Instant;
 

@@ -1,17 +1,18 @@
+use algorithms::config::DEFAULT_GROUP_ORDER_BIT_LENGTH;
 use anyhow::{anyhow, bail};
 use crossbeam_channel::{Receiver, Sender};
-use curv::elliptic::curves::{Scalar, Secp256k1};
-use ecdsa_mpc::algorithms::zkp::{ZkpSetup, DEFAULT_GROUP_ORDER_BIT_LENGTH};
-use ecdsa_mpc::ecdsa::keygen::{
+use ecdsa_mpc::keygen::{
     FinalState, KeyGeneratorTraits, Phase1, SecretKeyLoader, SecretKeyLoaderError,
 };
-use ecdsa_mpc::ecdsa::messages::keygen::InMsg;
-use ecdsa_mpc::ecdsa::messages::keygen::OutMsg;
-use ecdsa_mpc::ecdsa::{InitialKeys, InitialPublicKeys};
+use ecdsa_mpc::messages::keygen::InMsg;
+use ecdsa_mpc::messages::keygen::OutMsg;
 use ecdsa_mpc::protocol::{Address, InputMessage, PartyIndex};
-use ecdsa_mpc::state_machine::sync_channels::StateMachine;
-use ecdsa_mpc::Parameters;
+use ecdsa_mpc::types::Parameters;
+use ecdsa_mpc::types::Scalar;
+use ecdsa_mpc::types::{InitialKeys, InitialPublicKeys};
+use ecdsa_mpc::zk_range_proofs::ZkpSetup;
 use paillier::DecryptionKey;
+use state_machine::sync_channels::StateMachine;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
@@ -230,7 +231,7 @@ impl SecretKeyLoaderImpl {
 }
 
 impl SecretKeyLoader for SecretKeyLoaderImpl {
-    fn get_initial_secret(&self) -> Result<Box<Scalar<Secp256k1>>, SecretKeyLoaderError> {
+    fn get_initial_secret(&self) -> Result<Box<Scalar>, SecretKeyLoaderError> {
         let wallet = self
             .wallet
             .lock()

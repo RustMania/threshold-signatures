@@ -1,0 +1,46 @@
+[package]
+name = "state-machine"
+version = "0.4.1"
+license = "MIT"
+publish = false
+authors = [
+    "Oleg Burundukov <oleg.burundukov@ing.com>",
+    "Victor Ermolaev <victor.ermolaev@ing.com>"
+]
+edition = "2018"
+description = "Implementation of the state machine for network protocols used by secure multiparty computations"
+keywords =    [
+    "ecdsa",
+    "cryptography",
+    "MPC",
+    "bitcoin",
+    "ethereum",
+    "cryptocurrency"
+    ]
+
+[dependencies]
+serde = { version = "1.0.102", features = ["derive"] }
+hex = "0.4.0"
+log = "0.4.8"
+env_logger = "0.7.1"
+sha2 = "0.9"
+sodiumoxide = "0.2.5"
+strum = "0.18.0"
+strum_macros = "0.18.0"
+futures = "0.3.1"
+tokio = { version = "0.3.4", features = ["time", "rt-multi-thread", "macros"] }
+tokio-util = { version = "0.3.1", features = ["codec"] }
+trace = { path = "../trace" }
+crossbeam-channel = "0.4.0"
+serde_json = "1.0.42"
+thiserror = "1.0.24"
+anyhow = "1.0.38"
+
+[dev-dependencies]
+ecdsa-mpc = { path = "../ecdsa-mpc"}
+
+[package.metadata.docs.rs]
+rustdoc-args = [
+    "--html-in-header",
+    "katex.html",
+]

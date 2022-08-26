@@ -1,0 +1,51 @@
+[package]
+name = "ecdsa-mpc"
+version = "0.4.1"
+license = "MIT"
+authors = [
+    "Oleg Burundukov <oleg.burundukov@ing.com>",
+]
+edition = "2018"
+description = "Implementation of the threshold ECDSA in secure multiparty setup"
+keywords =    [
+    "ecdsa",
+    "cryptography",
+    "MPC",
+    "bitcoin",
+    "ethereum",
+    "cryptocurrency"
+    ]
+
+[dependencies]
+algorithms = { path = "../algorithms" }
+state-machine = { path = "../state-machine" }
+serde = { version = "1.0.102", features = ["derive"] }
+hex = "0.4.0"
+log = "0.4.8"
+env_logger = "0.7.1"
+sha2 = "0.9"
+sodiumoxide = "0.2.5"
+curv-kzen = { version = "0.9", features = ["rust-gmp-kzen"] }
+rand = "0.7.3"
+strum = "0.18.0"
+strum_macros = "0.18.0"
+futures = "0.3.1"
+tokio = { version = "0.3.4", features = ["time", "rt-multi-thread", "macros"] }
+tokio-util = { version = "0.3.1", features = ["codec"] }
+trace = { path = "../trace" }
+crossbeam-channel = "0.4.0"
+serde_json = "1.0.42"
+zeroize = { version="1.4.2", features = ["zeroize_derive"] }
+thiserror = "1.0.24"
+anyhow = "1.0.38"
+
+[dependencies.paillier]
+version = "0.4.2"
+package = "kzen-paillier"
+default-features = false
+
+[package.metadata.docs.rs]
+rustdoc-args = [
+    "--html-in-header",
+    "katex.html",
+]
