@@ -312,6 +312,4 @@ See CONTRIBUTING.md
 
 ## Contacts
 
-<oleg.burundukov@ing.com>
-
-<blockchain@ing.com>
+<oleg.burundukov@metaco.com
